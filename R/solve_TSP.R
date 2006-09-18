@@ -1,4 +1,4 @@
-solve_TSP <- function(x, method = NULL, options = NULL, ...) {
+solve_TSP <- function(x, method = NULL, control = NULL) {
 
     # check parameters
     if(!inherits(x, "TSP")) x <- TSP(x)
@@ -18,13 +18,13 @@ solve_TSP <- function(x, method = NULL, options = NULL, ...) {
 
     # work horses
     if(methodNr == 1) {
-        order <- tsp_insertion(x, nearest = FALSE, options = options)
+        order <- tsp_insertion(x, nearest = FALSE, control = control)
     }else if(methodNr == 2) {
-        order <- tsp_insertion(x, nearest = TRUE, options = options)
+        order <- tsp_insertion(x, nearest = TRUE, control = control)
     }else if(methodNr == 3) {
-        order <- tsp_greedy(x, options = options)
+        order <- tsp_greedy(x, control = control)
     }else if(methodNr == 4) {
-        order <- tsp_concorde(x, options = options)
+        order <- tsp_concorde(x, control = control)
     }
 
     if(!is.integer(order)) order <- as.integer(order)

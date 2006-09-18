@@ -1,14 +1,44 @@
 # interface to the Concorde algorithm
 
-tsp_concorde <- function(x, options = NULL){
+tsp_concorde <- function(x, control = NULL){
 
     # get parameters
-    clo         <- if(!is.null(options$clo))        options$clo         else ""
-    precision   <- if(!is.null(options$precision))  options$precision   else 6
-    exe         <- .find_concorde(options$exe)
+    clo         <- if(!is.null(control$clo))        control$clo         else ""
+    precision   <- if(!is.null(control$precision))  control$precision   else 6
+    exe         <- .find_concorde(control$exe)
+   
     
     # check x
     if(!inherits(x, "TSP")) x <- TSP(x)
+    
+    cat("\nrunning Concorde:\n")
+    
+
+    # check for possible integer overflows
+    max_x <- max(x)
+    if(n_of_cities(x) < 10){
+        # <10 cities: concorde can only handle max 2^15
+        MAX <- 2^15
+        if(max_x > MAX) stop("Concorde can only handle distances < 2^15 for less than 10 cities")
+        
+        prec <- floor(log10(MAX / max_x))
+        if(prec < precision) {
+            precision <- prec
+            warning(paste("Concorde can only handle distances < 2^15 for",
+                    "less than 10 cities. Reducing precision to", 
+                    precision), immediate. = TRUE)
+        }
+    }else{
+        # regular constraints on integer is 2^31 - 1    
+        MAX <- 2^31 - 1
+
+        prec <- floor(log10(MAX / max_x / n_of_cities(x)))
+        if(prec < precision) {
+            precision <- prec
+            warning(paste("Reducing precision for Concorde to",
+                    precision), immediate. = TRUE)
+        }
+    }
     
     # get temp files
     wd <- tempdir()
@@ -33,6 +63,7 @@ tsp_concorde <- function(x, options = NULL){
     
     if(!file.access(tmp_file_out) == 0) 
     stop("Problems with reading Concorde's output. Is Concorde properly installed?")
+    else cat("Concorde done.\n")
     
     order <- scan(tmp_file_out, what = integer(0), quiet = TRUE)
     # remove number of nodes and add one (result starts with 0)

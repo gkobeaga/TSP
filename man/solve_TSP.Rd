@@ -6,16 +6,15 @@
   Common interface to all symmetric TSP solvers in this package.
 }
 \usage{
-solve_TSP(x, method, options, \ldots)
+solve_TSP(x, method, control)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{ the TSP given as an object of class \code{TSP}.}
   \item{method}{ method to solve the TSP (default: farthest insertion 
       algorithm; see details). }
-  \item{options}{ a list of arguments passed on to the TSP solver
+  \item{control}{ a list of arguments passed on to the TSP solver
       selected by \code{method}.}
-  \item{\ldots}{ further arguments (currently unused).}
 }
 \details{
 Currently the following methods are available:
@@ -41,7 +40,7 @@ Currently the following methods are available:
         far away into the tour fist to establish an outline of the whole tour
         early.
         
-        Additional options: \code{start} index of the first city 
+        Additional control options: \code{start} index of the first city 
         (default: random city)
         }
     
@@ -53,7 +52,7 @@ Currently the following methods are available:
         algorithm always adds to last city in the tour the nearest not yet
         visited city. The algorithm stops when all cities are on the tour.
         
-        Additional options: \code{start} index of the first city 
+        Additional control options: \code{start} index of the first city 
         (default: random city)
         }
     
@@ -63,13 +62,13 @@ Currently the following methods are available:
           this package and has to be obtained and installed separately (see
           \code{\link{tsp_concorde_help}}).
 
-          Additional options: 
+          Additional control options: 
           
           \code{exe} character string containing the path to the executable 
           (see \code{tsp_concorde_help})
 
           \code{clo} character string containing command line options for
-Concorde, e.g., \code{options = list(clo = "-B -v")}. See
+Concorde, e.g., \code{control = list(clo = "-B -v")}. See
 \code{tsp_concorde_help} on how to obtain a complete list of available
 command line options. 
 
@@ -118,7 +117,7 @@ tsp <- TSP(dist(iris[1:4]))
 ## reorder
 tour1 <- solve_TSP(tsp)
 tour2 <- solve_TSP(tsp, method = "nearest_insertion")
-tour3 <- solve_TSP(tsp, method = "greedy", options = list(start = 1)) 
+tour3 <- solve_TSP(tsp, method = "greedy", control = list(start = 1)) 
 
 tour1
 tour2

@@ -1,6 +1,6 @@
 # Greedy tour also called nearest neighbor algorithm
 
-tsp_greedy <- function(x, options = NULL) {
+tsp_greedy <- function(x, control = NULL) {
 
     # check parameters
     if(!inherits(x, "TSP")) x <- TSP(x)
@@ -10,7 +10,7 @@ tsp_greedy <- function(x, options = NULL) {
     # we use a matrix for now
     x <- as.matrix(x)
 
-    start <- options$start
+    start <- control$start
     if(is.null(start)) start <- sample(1:n, 1)
     if(start < 0 || start > n) stop(paste("illegal value for", sQuote("start")))
     
