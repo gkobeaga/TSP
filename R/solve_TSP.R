@@ -17,27 +17,27 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 ## generic
-solve_TSP <- function(x, method = NULL, control = NULL, ...)
+solve_TSP <- function(x, method = NULL, control = NULL, stdout = "", ...)
   UseMethod("solve_TSP")
 
 ## TSP
-solve_TSP.TSP <- function(x, method = NULL, control = NULL, ...) {
-  .solve_TSP(x, method, control, ...)
+solve_TSP.TSP <- function(x, method = NULL, control = NULL, stdout = "", ...) {
+  .solve_TSP(x, method, control, stdout, ...)
 }
 
 ## ATSP
-solve_TSP.ATSP <- function(x, method = NULL, control = NULL, ...) {
-  .solve_TSP(x, method, control, ...)
+solve_TSP.ATSP <- function(x, method = NULL, control = NULL, stdout = "", ...) {
+  .solve_TSP(x, method, control, stdout, ...)
 }
 
 ## ETSP
-solve_TSP.ETSP <- function(x, method = NULL, control = NULL, ...) {
+solve_TSP.ETSP <- function(x, method = NULL, control = NULL, stdout = "", ...) {
   
   ## all but concorde and linkern can only do TSP
   m <- pmatch(tolower(method), c("concorde", "linkern"))
   if(length(m) == 0L || is.na(m)) x <- as.TSP(x) 
     
-  .solve_TSP(x, method, control, ...)
+  .solve_TSP(x, method, control, stdout, ...)
 }
 
 
@@ -55,7 +55,7 @@ solve_TSP.ETSP <- function(x, method = NULL, control = NULL, ...) {
 }
 
 ## workhorse
-.solve_TSP <- function(x, method = NULL, control = NULL, ...) {
+.solve_TSP <- function(x, method = NULL, control = NULL, stdout = "", ...) {
     
   ## add ... to control
   control <- c(control, list(...))
@@ -103,8 +103,8 @@ solve_TSP.ETSP <- function(x, method = NULL, control = NULL, ...) {
       repetitive_nn = tsp_repetitive_nn(x_, control = control),
       two_opt = tsp_two_opt(x_, control = control),
       '2-opt' = tsp_two_opt(x_, control = control),
-      concorde = tsp_concorde(x_, control = control),
-      linkern = tsp_linkern(x_, control = control)
+      concorde = tsp_concorde(x_, control = control, stdout),
+      linkern = tsp_linkern(x_, control = control, stdout)
     )
     
     ### do refinement two_opt

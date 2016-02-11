@@ -21,7 +21,7 @@
 ## interface to the Concorde algorithm 
 ## (can only handle TSP and no neg. distances!)
 
-tsp_concorde <- function(x, control = NULL){
+tsp_concorde <- function(x, control = NULL, stdout = ""){
   
   ## get parameters
   clo         <- if(!is.null(control$clo))        control$clo         else ""
@@ -87,7 +87,7 @@ tsp_concorde <- function(x, control = NULL){
   ## do the call and read back result
   ## we do not check return values of concorde since they are not
   ## very consistent
-  system(paste(exe, "-x", "-o", tmp_file_out , clo, tmp_file_in))
+  system2(exe, paste("-x", "-o", tmp_file_out , clo, tmp_file_in),  stdout = stdout)
   
   if(!file.access(tmp_file_out) == 0) 
     stop("Problems with reading Concorde's output.\nIs concorde properly installed?\nFor details see ? Concorde")
@@ -106,7 +106,7 @@ tsp_concorde <- function(x, control = NULL){
 ## interface to the Concorde's Chained Lin-Kernighan algorithm 
 ## (can only handle TSP, handles neg. distances)
 
-tsp_linkern <- function(x, control = NULL){
+tsp_linkern <- function(x, control = NULL, stdout = ""){
   
   ## get parameters
   clo         <- if(!is.null(control$clo))        control$clo         else ""
@@ -157,7 +157,7 @@ tsp_linkern <- function(x, control = NULL){
   ## do the call and read back result
   ## we do not check return values of concorde since they are not
   ## very consistent
-  system(paste(exe, verbatim, "-o", tmp_file_out , clo, tmp_file_in))
+  system2(exe, paste(verbatim, "-o", tmp_file_out , clo, tmp_file_in),stdout = stdout)
   
   if(!file.access(tmp_file_out) == 0) 
     stop("Problems with reading linkern's output. Is linkern properly installed?")
